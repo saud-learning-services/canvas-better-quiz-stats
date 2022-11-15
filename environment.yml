@@ -1,4 +1,4 @@
-name: PROJECT
+name: canvas_better_quiz_stats
 channels:
   - conda-forge
   - anaconda
