@@ -28,3 +28,23 @@ def _get_course(canvas_obj, course_id):
         util.shut_down(f'ERROR: Could not find course [ID: {course_id}]. Please check course id.')
 
     return course
+
+def create_dict_from_object(theobj, list_of_attributes):
+    """given an object and list of attributes return a dictionary
+    Args:
+        theobj (a Canvas object)
+        list_of_attributes (list of strings)
+    Returns:
+        mydict
+    """
+
+    def get_attribute_if_available(theobj, attrname):
+        if hasattr(theobj, attrname):
+            return {attrname: getattr(theobj, attrname)}
+        else:
+            return {attrname: None}
+
+    mydict = {}
+    for i in list_of_attributes:
+        mydict.update(get_attribute_if_available(theobj, i))
+    return mydict
