@@ -37,14 +37,14 @@ This file is a combination of the three files listed below.
 - **question_id**: the Canvas question id
 - **quiz_submission_question_question_name**: the submission question name (as seen by the student). Important for "pick X" type questions and/or randomization of order. This will be the question order as seen by the student
 - **quiz_submission_question_question_text**: the submission question text as seen by the student
-**quiz_submission_question_variables**: the submission question variables (for question specific to student in case of randomization)
+- **quiz_submission_question_variables**: the submission question variables (for question specific to student in case of randomization)
 - **submission_history_id**: (submission_id) a unique id for the student's submission
 **submission_data_correct**: for the student whether the submission is correct (TRUE, FALSE, undefined, and partial)
 - **submission_data_points**: the points given to the student's question submission
-**submission_data_text**: the text of the student question submission - Canvas also uses text for m/c and other variable inputs, can be joined with "answers"
+- **submission_data_text**: the text of the student question submission - Canvas also uses text for m/c and other variable inputs, can be joined with "answers"
 - **question_name_tagged**: the name of the question as created by the instructor. This is not visible to students
 - **question_type**: the question type
-**question_text_original**: the original question text (if variables or randomization included)
+- **question_text_original**: the original question text (if variables or randomization included)
 - **variables**: the original question variables
 - **answers**: answers to the original question
 
