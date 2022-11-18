@@ -1,6 +1,12 @@
 from canvasapi import Canvas
 import util
 import sys
+import settings
+import itertools
+import pandas as pd
+import pprint
+from pathlib import Path
+from yaspin import yaspin
 
 def create_instance(API_URL, API_KEY):
     try:
@@ -48,3 +54,123 @@ def create_dict_from_object(theobj, list_of_attributes):
     for i in list_of_attributes:
         mydict.update(get_attribute_if_available(theobj, i))
     return mydict
+
+
+def create_folder(folder_path):
+    Path(folder_path).mkdir(parents=True, exist_ok=True)
+    return(f'creating {folder_path}')
+
+def _create_sub_dict_from_id_list(og_dict, dict_key_prefix, list_keys_no_prefix, list_key_prefix):
+    
+    new_dict = {}
+    
+    if list_keys_no_prefix:
+    
+        for i in list_keys_no_prefix:
+
+            new_dict.update({
+                f'{i}': og_dict.get(i)
+            })
+    
+    if list_key_prefix:   
+        for i in list_key_prefix:
+
+            new_dict.update({
+                f'{dict_key_prefix}_{i}': og_dict.get(i)
+            })
+        
+    return(new_dict)
+
+def create_quiz_question_df(quiz):
+    
+    quiz_questions = quiz.get_questions()
+    quiz_question_attrs = ['id', 'quiz_id', 'question_name', 'question_type', 'question_text', 'variables', 'answers']
+    quiz_question_list = [create_dict_from_object(i, quiz_question_attrs) for i in quiz_questions]
+    
+    df = pd.DataFrame(quiz_question_list)
+    df = df.rename({"id": "question_id",
+                        "question_name": "question_name_tagged",
+                        "question_text": "question_text_original"}, axis=1)
+    return(df)
+
+def create_quiz_submission_df(quiz):
+    quiz_submissions = quiz.get_submissions()
+
+    quiz_submissions_and_questions_list = []
+    quiz_submissions_attrs = ['id', 'quiz_id', 'quiz_version', 'user_id','submission_id', 'attempt']
+    
+    print("Getting Quiz Submission Questions")
+    for ind, i in enumerate(quiz_submissions):
+        
+        with yaspin(text=f"{ind}: {i}") as spinner:
+
+            quiz_submission_dict = create_dict_from_object(i, quiz_submissions_attrs)
+            quiz_submission_questions = i.get_submission_questions()
+
+            for j in quiz_submission_questions:
+
+                qsq_dict = create_dict_from_object(j, ['id', 'quiz_id', 'assessment_question_id',
+                                                      'position', 'question_name', 'question_type', 
+                                                       'variables', 'attempt',
+                                                      'quiz_submission_id', 'correct'])
+
+                qsq_dict = _create_sub_dict_from_id_list(qsq_dict, 'quiz_submission_question', 
+                                                        ['quiz_id', 'assessment_question_id',
+                                                                             'attempt', 'question_type', 'quiz_submission_id',
+                                                                            'correct'],
+                                                        ['id', 'position', 'question_name', 'variables'])
+
+                qsq_dict.update(quiz_submission_dict)
+                quiz_submissions_and_questions_list.append(qsq_dict)
+                
+    spinner.ok("✅ Done")
+    
+    df = pd.DataFrame(quiz_submissions_and_questions_list)
+    return(df)
+    
+def create_quiz_submission_responses_df(quiz, course):
+    
+    print("Getting Quiz Submission Answers")
+    
+    quiz_assignment_id = quiz.assignment_id
+    assignment = course.get_assignment(quiz_assignment_id)
+    assignment_submissions = assignment.get_submissions(include="submission_history")
+    assignment_submissions_attrs = ['id', 'user_id', 'attempt', 'submission_history']
+    assignment_submissions_list = [create_dict_from_object(i, assignment_submissions_attrs) for i in assignment_submissions]
+
+
+    submission_history_list = []
+
+    for ind, i in enumerate(assignment_submissions_list):
+
+        submission_attempt_dict = {
+            'id': i.get('id'),
+            'user_id': i.get('user_id'),
+        }
+
+        submission_attempt_history = i.get("submission_history")
+        
+        with yaspin(text=f"getting {ind}") as spinner:
+            
+            for j in submission_attempt_history:
+                list_keys_no_prefix = ['user_id', 'attempt', 'submission_type']
+                list_keys_prefix = ['id']
+                submission_attempt_history_dict = _create_sub_dict_from_id_list(j, 'submission_history', list_keys_no_prefix, list_keys_prefix)
+
+                submission_attempt_data = j.get("submission_data")
+
+                if submission_attempt_data:
+
+                    for k in submission_attempt_data:
+                        list_keys_no_prefix = ['question_id']
+                        list_keys_prefix = ['correct', 'points', 'text']
+
+                        submission_attempt_data_dict = _create_sub_dict_from_id_list(k, 'submission_data', list_keys_no_prefix, list_keys_prefix)
+                        submission_attempt_data_dict.update(submission_attempt_history_dict)
+
+                        submission_history_list.append(submission_attempt_data_dict)
+    
+    spinner.ok("✅ Done")                
+    df = pd.DataFrame(submission_history_list)
+    return(df)
+        
