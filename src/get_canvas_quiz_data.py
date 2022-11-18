@@ -27,7 +27,7 @@ def main():
     quiz_submission_df = create_quiz_submission_df(quiz)
     quiz_submission_responses = create_quiz_submission_responses_df(course, quiz)
 
-    submission_with_questions = quiz_submission_df.merge(quiz_submission_responses,left_on=["submission_detail_question_id","submission_detail_id", "user_id", "attempt"], right_on=["question_id","submission_history_id", "user_id", "attempt"], how="outer")
+    submission_with_questions = quiz_submission_df.merge(quiz_submission_responses,left_on=["quiz_submission_question_question_id","quiz_submission_question_id", "user_id", "attempt"], right_on=["question_id","submission_history_id", "user_id", "attempt"], how="outer")
 
     submission_with_questions_and_info = submission_with_questions.merge(quiz_questions_df, how="left", left_on=["question_id", "quiz_id"], right_on=["question_id", "quiz_id"])
 

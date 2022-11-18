@@ -112,7 +112,7 @@ def create_quiz_submission_df(quiz):
                 qsq_dict = create_dict_from_object(j, ['id', 'quiz_id',
                                                       'position', 'question_name', 'variables', 'attempt', 'quiz_submission_id', 'correct'])
 
-                qsq_dict = _create_sub_dict_from_id_list(qsq_dict, 'submission_detail', 
+                qsq_dict = _create_sub_dict_from_id_list(qsq_dict, 'quiz_submission_question', 
                                                         ['id', 'position', 'question_name', 'variables'],
                                                         ['quiz_id', 'attempt', 'quiz_submission_id','correct'])
 
