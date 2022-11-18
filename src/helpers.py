@@ -142,7 +142,7 @@ def create_quiz_submission_responses_df(course, quiz):
         submission_attempt_dict = create_dict_from_object(i, assignment_submissions_attrs)
         submission_attempt_history = submission_attempt_dict.get("submission_history")
         
-        with yaspin(text=f"getting {ind}") as spinner:
+        with yaspin(text=f"getting submission answers") as spinner:
             
             for j in submission_attempt_history:
                 

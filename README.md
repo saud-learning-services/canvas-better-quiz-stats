@@ -68,5 +68,5 @@ API_URL = 'https://ubc.instructure.com'
 1. Run:
    1. navigate to your directory `$ cd YOUR_PATH/canvas-better-quiz-stats`
    1. activate the environment (see step 3 on first run) `$ conda activate canvas_better_quiz_stats`
-   1. update your environment (.env) file with new token
+   1. update your environment (.env) file with new token as needed
    1. run the script and follow prompts in terminal `$ python src/canvas_better_quiz_stats.py`
