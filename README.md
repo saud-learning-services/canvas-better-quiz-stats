@@ -1,9 +1,14 @@
 # Canvas Get More Quiz Details
 ⚠️ WIP! questions? Ask Alison! 
 > - name: canvas-better-quiz-stats
-> - runs-with: terminaal
+> - runs-with: terminal
 > - python >= 3.8
 > - canvasapi>=2.0.0 (likely built with 3.0)
+
+⚠️ Things I don't know yet
+- if it works properly with multiple attempts
+- what randomization in questions looks like (variables)
+- how to get the points of grouped questions
 
 ## Summary
 Canvas quiz statistics are unavailable for large courses, and do not display useful information when randomization in questions (either through pick X, or variables) are used. This script creates a number of csv files for a single quiz - including the questions as seen (and responded to) by individual students, as well as the original question information. 
