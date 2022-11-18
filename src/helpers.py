@@ -110,16 +110,17 @@ def create_quiz_submission_df(quiz):
             for j in quiz_submission_questions:
 
                 qsq_dict = create_dict_from_object(j, ['id', 'quiz_id',
-                                                      'position', 'question_name', 'variables', 'attempt', 'quiz_submission_id', 'correct'])
+                                                      'position', 'question_name', 'question_text', 'variables', 'attempt', 'quiz_submission_id', 'correct'])
 
                 qsq_dict = _create_sub_dict_from_id_list(qsq_dict, 'quiz_submission_question', 
-                                                        ['id', 'position', 'question_name', 'variables'],
+                                                        ['id', 'position', 'question_name', 'question_text', 'variables'],
                                                         ['quiz_id', 'attempt', 'quiz_submission_id','correct'])
 
                 qsq_dict.update(quiz_submission_dict)
                 quiz_submissions_and_questions_list.append(qsq_dict)
                 
     spinner.ok("✅ Done")
+    spinner.stop()
     
     df = pd.DataFrame(quiz_submissions_and_questions_list)
     return(df)
@@ -162,7 +163,9 @@ def create_quiz_submission_responses_df(course, quiz):
 
                         submission_history_list.append(submission_attempt_data_dict)
     
-    spinner.ok("✅ Done")                
+    spinner.ok("✅ Done")    
+    spinner.stop()
+                
     df = pd.DataFrame(submission_history_list)
     return(df)
         

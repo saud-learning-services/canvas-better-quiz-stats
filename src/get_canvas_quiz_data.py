@@ -27,13 +27,19 @@ def main():
     quiz_submission_df = create_quiz_submission_df(quiz)
     quiz_submission_responses = create_quiz_submission_responses_df(course, quiz)
 
-    submission_with_questions = quiz_submission_df.merge(quiz_submission_responses,left_on=["quiz_submission_question_question_id","quiz_submission_question_id", "user_id", "attempt"], right_on=["question_id","submission_history_id", "user_id", "attempt"], how="outer")
-
-    submission_with_questions_and_info = submission_with_questions.merge(quiz_questions_df, how="left", left_on=["question_id", "quiz_id"], right_on=["question_id", "quiz_id"])
-
     quiz_questions_df.to_csv(f"{output_folder}/question_info.csv")
     quiz_submission_df.to_csv(f"{output_folder}/question_submission_info.csv") 
     quiz_submission_responses.to_csv(f"{output_folder}/student_submission_responses.csv")  
+
+    #merge datasets 
+
+    submission_with_questions = quiz_submission_df.merge(quiz_submission_responses,left_on=["quiz_submission_question_id","quiz_submission_id", "user_id", "attempt"], right_on=["question_id","submission_history_id", "user_id", "attempt"], how="outer")[["quiz_id", "attempt", "user_id", "quiz_submission_id", "quiz_submission_question_id", 
+                           "question_id", "quiz_submission_question_question_name", "quiz_submission_question_question_text",
+                          "quiz_submission_question_variables", "submission_history_id", "submission_data_correct", "submission_data_points",
+                          "submission_data_text"]]
+
+    submission_with_questions_and_info = submission_with_questions.merge(quiz_questions_df, how="left", left_on=["question_id", "quiz_id"], right_on=["question_id", "quiz_id"])
+
     submission_with_questions_and_info.to_csv(f"{output_folder}/full_joined.csv") 
 
     print(f"🥳 Complete")
