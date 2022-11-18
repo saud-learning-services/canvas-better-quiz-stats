@@ -17,9 +17,11 @@ Canvas quiz statistics are unavailable for large courses, and do not display use
 ## Output
 
 Creates outputs in folder: `data/course_id/quiz_id`
+> - Note: question points possible not included - for grouped questions (i.e. "pick X of Y") the points applied may overwrite original question points
 
 #### `full_joined.csv`
-> combination of the three files below
+This file is a combination of the three files listed below. 
+
   
 - **quiz_id**: the Canvas quiz id
 - **attempt**: the quiz attempt of the individual student
