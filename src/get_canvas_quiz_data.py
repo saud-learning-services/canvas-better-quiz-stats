@@ -21,9 +21,11 @@ def main():
     output_folder = f"data/{course.id}/{quiz.id}"
     create_folder(output_folder)
 
+    print("For large courses this may take some time ...")
+
     quiz_questions_df = create_quiz_question_df(quiz)
     quiz_submission_df = create_quiz_submission_df(quiz)
-    quiz_submission_responses = create_quiz_submission_responses_df(quiz)
+    quiz_submission_responses = create_quiz_submission_responses_df(course, quiz)
 
     submission_with_questions = quiz_submission_df.merge(quiz_submission_responses,left_on=["quiz_submission_question_id","quiz_submission_id", "user_id", "attempt"], right_on=["question_id","submission_history_id", "user_id", "attempt"], how="outer")
 

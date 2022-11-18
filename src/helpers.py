@@ -128,31 +128,27 @@ def create_quiz_submission_df(quiz):
     df = pd.DataFrame(quiz_submissions_and_questions_list)
     return(df)
     
-def create_quiz_submission_responses_df(quiz, course):
+def create_quiz_submission_responses_df(course, quiz):
     
     print("Getting Quiz Submission Answers")
     
     quiz_assignment_id = quiz.assignment_id
     assignment = course.get_assignment(quiz_assignment_id)
     assignment_submissions = assignment.get_submissions(include="submission_history")
-    assignment_submissions_attrs = ['id', 'user_id', 'attempt', 'submission_history']
-    assignment_submissions_list = [create_dict_from_object(i, assignment_submissions_attrs) for i in assignment_submissions]
-
-
+    
+    assignment_submissions_attrs = ['id', 'user_id', 'submission_history']
+    
     submission_history_list = []
 
-    for ind, i in enumerate(assignment_submissions_list):
-
-        submission_attempt_dict = {
-            'id': i.get('id'),
-            'user_id': i.get('user_id'),
-        }
-
-        submission_attempt_history = i.get("submission_history")
+    for ind, i in enumerate(assignment_submissions):
+        
+        submission_attempt_dict = create_dict_from_object(i, assignment_submissions_attrs)
+        submission_attempt_history = submission_attempt_dict.get("submission_history")
         
         with yaspin(text=f"getting {ind}") as spinner:
             
             for j in submission_attempt_history:
+                
                 list_keys_no_prefix = ['user_id', 'attempt', 'submission_type']
                 list_keys_prefix = ['id']
                 submission_attempt_history_dict = _create_sub_dict_from_id_list(j, 'submission_history', list_keys_no_prefix, list_keys_prefix)
