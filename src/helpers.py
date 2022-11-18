@@ -60,7 +60,7 @@ def create_folder(folder_path):
     Path(folder_path).mkdir(parents=True, exist_ok=True)
     return(f'creating {folder_path}')
 
-def _create_sub_dict_from_id_list(og_dict, dict_key_prefix, list_keys_no_prefix, list_key_prefix):
+def _create_sub_dict_from_id_list(og_dict, dict_key_prefix, list_key_prefix, list_keys_no_prefix):
     
     new_dict = {}
     
@@ -109,16 +109,12 @@ def create_quiz_submission_df(quiz):
 
             for j in quiz_submission_questions:
 
-                qsq_dict = create_dict_from_object(j, ['id', 'quiz_id', 'assessment_question_id',
-                                                      'position', 'question_name', 'question_type', 
-                                                       'variables', 'attempt',
-                                                      'quiz_submission_id', 'correct'])
+                qsq_dict = create_dict_from_object(j, ['id', 'quiz_id',
+                                                      'position', 'question_name', 'variables', 'attempt', 'quiz_submission_id', 'correct'])
 
-                qsq_dict = _create_sub_dict_from_id_list(qsq_dict, 'quiz_submission_question', 
-                                                        ['quiz_id', 'assessment_question_id',
-                                                                             'attempt', 'question_type', 'quiz_submission_id',
-                                                                            'correct'],
-                                                        ['id', 'position', 'question_name', 'variables'])
+                qsq_dict = _create_sub_dict_from_id_list(qsq_dict, 'submission_detail', 
+                                                        ['id', 'position', 'question_name', 'variables'],
+                                                        ['quiz_id', 'attempt', 'quiz_submission_id','correct'])
 
                 qsq_dict.update(quiz_submission_dict)
                 quiz_submissions_and_questions_list.append(qsq_dict)
@@ -151,17 +147,17 @@ def create_quiz_submission_responses_df(course, quiz):
                 
                 list_keys_no_prefix = ['user_id', 'attempt', 'submission_type']
                 list_keys_prefix = ['id']
-                submission_attempt_history_dict = _create_sub_dict_from_id_list(j, 'submission_history', list_keys_no_prefix, list_keys_prefix)
+                submission_attempt_history_dict = _create_sub_dict_from_id_list(j, 'submission_history', list_keys_prefix, list_keys_no_prefix)
 
                 submission_attempt_data = j.get("submission_data")
 
                 if submission_attempt_data:
 
                     for k in submission_attempt_data:
-                        list_keys_no_prefix = ['question_id']
                         list_keys_prefix = ['correct', 'points', 'text']
+                        list_keys_no_prefix = ['question_id']
 
-                        submission_attempt_data_dict = _create_sub_dict_from_id_list(k, 'submission_data', list_keys_no_prefix, list_keys_prefix)
+                        submission_attempt_data_dict = _create_sub_dict_from_id_list(k, 'submission_data', list_keys_prefix, list_keys_no_prefix)
                         submission_attempt_data_dict.update(submission_attempt_history_dict)
 
                         submission_history_list.append(submission_attempt_data_dict)
