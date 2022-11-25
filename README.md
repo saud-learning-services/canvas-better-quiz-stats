@@ -25,7 +25,7 @@ Canvas quiz statistics are unavailable for large courses, and do not display use
 Creates outputs in folder: `data/course_id/quiz_id`
 > - Note: question points possible not included - for grouped questions (i.e. "pick X of Y") the points applied may overwrite original question points
 
-#### `full_joined.csv`
+#### `student_view_questions_answers.csv`
 This file is a combination of the three files listed below. 
 
   
@@ -36,12 +36,12 @@ This file is a combination of the three files listed below.
 - **quiz_submission_question_id**: the question id of the submission (should match the question_id, included as sanity check)
 - **question_id**: the Canvas question id
 - **quiz_submission_question_question_name**: the submission question name (as seen by the student). Important for "pick X" type questions and/or randomization of order. This will be the question order as seen by the student
-- **quiz_submission_question_question_text**: the submission question text as seen by the student
+~~- **quiz_submission_question_question_text**: the submission question text as seen by the student~~
 - **quiz_submission_question_variables**: the submission question variables (for question specific to student in case of randomization)
 - **submission_history_id**: (submission_id) a unique id for the student's submission
 **submission_data_correct**: for the student whether the submission is correct (TRUE, FALSE, undefined, and partial)
 - **submission_data_points**: the points given to the student's question submission
-- **submission_data_text**: the text of the student question submission - Canvas also uses text for m/c and other variable inputs, can be joined with "answers"
+~~- **submission_data_text**: the text of the student question submission - Canvas also uses text for m/c and other variable inputs, can be joined with "answers"~~
 - **question_name_tagged**: the name of the question as created by the instructor. This is not visible to students
 - **question_type**: the question type
 - **question_text_original**: the original question text (if variables or randomization included)
