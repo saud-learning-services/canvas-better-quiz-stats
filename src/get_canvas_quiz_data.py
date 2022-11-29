@@ -34,7 +34,7 @@ def main():
     #merge datasets 
 
     submission_with_questions = quiz_submission_df.merge(quiz_submission_responses,left_on=["quiz_submission_question_id","quiz_submission_id", "user_id", "attempt"], right_on=["question_id","submission_history_id", "user_id", "attempt"], how="outer")[["quiz_id", "attempt", "user_id", "quiz_submission_id", "quiz_submission_question_id", 
-                           "question_id", "quiz_submission_question_question_name", #"quiz_submission_question_question_text",
+                           "question_id", "quiz_submission_question_question_name"#"quiz_submission_question_question_text",
                           "quiz_submission_question_variables", "submission_history_id", "submission_data_correct", "submission_data_points"]]
                           #"submission_data_text"
 
